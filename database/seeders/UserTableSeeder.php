@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Post;
+
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserTableSeeder extends Seeder
@@ -17,8 +19,8 @@ class UserTableSeeder extends Seeder
     {
         //create user
         $user = User::create([
-            'name'      => 'Syahrizaldev',
-            'email'     => 'izaldev@gmail.com',
+            'name'      => 'nazwa',
+            'email'     => 'nazwa@gmail.com', 
             'password'  => bcrypt('password'),
         ]);
 
@@ -33,5 +35,7 @@ class UserTableSeeder extends Seeder
 
         //assign role to user
         $user->assignRole($role);
+
+        
     }
 }
