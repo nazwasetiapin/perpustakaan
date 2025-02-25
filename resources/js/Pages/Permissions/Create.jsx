@@ -40,7 +40,8 @@ export default function Create({auth}) {
                 <Card title={'Create new permission'}>
                     <form onSubmit={handleStoreData}>
                         <div className='mb-4'>
-                            <Input label={'Permission Name'} type={'text'} value={data.name} onChange={e => setData('name', e.target.value)} errors={errors.name} placeholder="Input permission name.."/>
+                            <Input label={'Permission Name'} 
+                            type={'text'} value={data.name} onChange={e => setData('name', e.target.value)} errors={errors.name} placeholder="Input permission name.."/>
                         </div>
                         <div className='flex items-center gap-2'>
                             <Button type={'submit'} />

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Post extends Model
+class Book extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title', 'body'
+        'title', 'author', 'publisher', 'year',
     ];
 }

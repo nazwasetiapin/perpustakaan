@@ -46,12 +46,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Users
                                     </NavLink>
                                 }
-                                {hasAnyPermission(['posts index']) &&
+                                {hasAnyPermission(['books index']) &&
                                     <NavLink 
-                                        href={route('posts.index')} 
-                                        active={route().current('posts*')}
+                                        href={route('books.index')} 
+                                        active={route().current('books*')}
                                     >
-                                        Posts
+                                        Books
                                     </NavLink>
                                 }
                             </div>
@@ -177,12 +177,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                 Users
                             </ResponsiveNavLink>
                         }
-                        {hasAnyPermission(['posts index']) &&
+                        {hasAnyPermission(['books index']) &&
                             <ResponsiveNavLink
-                                href={route('posts.index')}
-                                active={route().current('posts*')}
+                                href={route('books.index')}
+                                active={route().current('books*')}
                             >
-                                Posts
+                                Books
                             </ResponsiveNavLink>
                         }
                     </div>

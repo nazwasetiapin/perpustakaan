@@ -11,22 +11,26 @@ export default function Create({ auth }) {
     // Mendefinisikan state form dengan field title dan body
     const { data, setData, post, errors } = useForm({
         title: '',
-        body: ''
+        body: '',
+        author: '',
+        publisher: '',
+        year: ''
     });
+    
 
-    // Method untuk menyimpan data post
+    // Method untuk menyimpan data book
     const handleStoreData = async (e) => {
         e.preventDefault();
 
-        post(route('posts.store'), {
+        post(route('books.store'), {
             onSuccess: () => {
                 Swal.fire({
                     title: 'Success!',
-                    text: 'Post created successfully!',
+                    text: 'Book created successfully!',
                     icon: 'success',
                     showConfirmButton: false,
-                    timer: 1500,
-                });
+                    timer: 1500
+                })
             }
         });
     }
@@ -36,13 +40,13 @@ export default function Create({ auth }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Create Post
+                    Create Book
                 </h2>
             }
         >
-            <Head title={'Create Post'} />
+            <Head title={'Create Book'} />
             <Container>
-                <Card title={'Create new post'}>
+                <Card title={'Create new book'}>
                     <form onSubmit={handleStoreData}>
                         <div className="mb-4">
                             <Input 
@@ -51,26 +55,46 @@ export default function Create({ auth }) {
                                 value={data.title} 
                                 onChange={e => setData('title', e.target.value)} 
                                 errors={errors.title} 
-                                placeholder="Input post title..." 
+                                placeholder="Input book title..." 
                             />
                         </div>
                         <div className="mb-4">
                             <Input 
-                                label={'Body'} 
+                                label={'Author'} 
                                 type={'text'} 
-                                value={data.body} 
-                                onChange={e => setData('body', e.target.value)} 
-                                errors={errors.body} 
-                                placeholder="Input post body..." 
+                                value={data.author} 
+                                onChange={e => setData('author', e.target.value)} 
+                                errors={errors.author} 
+                                placeholder="Input book author..." 
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <Input 
+                                label={'Published'} 
+                                type={'text'} 
+                                value={data.publisher} 
+                                onChange={e => setData('publisher', e.target.value)} 
+                                errors={errors.publisher} 
+                                placeholder="Input book published..." 
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <Input 
+                                label={'Year'} 
+                                type={'text'} 
+                                value={data.year} 
+                                onChange={e => setData('year', e.target.value)} 
+                                errors={errors.year} 
+                                placeholder="Input book year..." 
                             />
                         </div>
                         <div className="flex items-center gap-2">
-                            <Button type={'submit'} />
-                            <Button type={'cancel'} url={route('posts.index')} />
+                            <Button type={'submit'}  />
+                            <Button type={'cancel'} url={route('books.index')} />
                         </div>
                     </form>
                 </Card>
             </Container>
         </AuthenticatedLayout>
-    );
+    )
 }
