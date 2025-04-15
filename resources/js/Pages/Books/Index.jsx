@@ -44,6 +44,8 @@ export default function Index({ auth }) {
                                 <Table.Th>Author</Table.Th>
                                 <Table.Th>Published</Table.Th>
                                 <Table.Th>Year</Table.Th>
+                                <Table.Th>Category</Table.Th>
+                                <Table.Th>Action</Table.Th>
                             </tr>
                         </Table.Thead>
                         <Table.Tbody>
@@ -56,6 +58,18 @@ export default function Index({ auth }) {
                                     <Table.Td>{book.author}</Table.Td>
                                     <Table.Td>{book.publisher}</Table.Td>
                                     <Table.Td>{book.year}</Table.Td>
+                                    <Table.Td>
+                                    <div className="flex flex-wrap gap-1">
+        {book.categories.map((category) => (
+            <span
+                key={category.id}
+                className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded"
+            >
+                {category.name}
+            </span>
+        ))}
+    </div> 
+                                    </Table.Td>
                                     <Table.Td>
                                         <div className="flex items-center gap-2">
                                             {hasAnyPermission(['books edit']) && (

@@ -12,4 +12,9 @@ class Book extends Model
     protected $fillable = [
         'title', 'author', 'publisher', 'year',
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'book_category');
+    }
 }

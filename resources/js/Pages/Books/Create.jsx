@@ -7,16 +7,16 @@ import Button from '@/Components/Button';
 import Card from '@/Components/Card';
 import Swal from 'sweetalert2';
 
-export default function Create({ auth }) {
-    // Mendefinisikan state form dengan field title dan body
+export default function Create({ auth, categories }) {
+    // Tambahkan category_ids di form state
     const { data, setData, post, errors } = useForm({
         title: '',
         body: '',
         author: '',
         publisher: '',
-        year: ''
+        year: '',
+        category_ids: [], // <-- ini tambahan
     });
-    
 
     // Method untuk menyimpan data book
     const handleStoreData = async (e) => {
@@ -88,8 +88,43 @@ export default function Create({ auth }) {
                                 placeholder="Input book year..." 
                             />
                         </div>
+
+                       {/* 💡 Checkbox kategori */}
+<div className="mb-4">
+    <label className="block mb-2 text-sm font-medium text-gray-700">
+        Categories
+    </label>
+    <div className="flex flex-wrap gap-4">
+        {categories.map(category => (
+            <label key={category.id} className="flex items-center space-x-2">
+                <input
+                    type="checkbox"
+                    value={category.id}
+                    checked={data.category_ids.includes(category.id)}
+                    onChange={(e) => {
+                        if (e.target.checked) {
+                            setData('category_ids', [...data.category_ids, category.id]);
+                        } else {
+                            setData(
+                                'category_ids',
+                                data.category_ids.filter(id => id !== category.id)
+                            );
+                        }
+                    }}
+                    className="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">{category.name}</span>
+            </label>
+        ))}
+    </div>
+    {errors.category_ids && (
+        <div className="text-sm text-red-600 mt-1">{errors.category_ids}</div>
+    )}
+</div>
+
+
                         <div className="flex items-center gap-2">
-                            <Button type={'submit'}  />
+                            <Button type={'submit'} />
                             <Button type={'cancel'} url={route('books.index')} />
                         </div>
                     </form>

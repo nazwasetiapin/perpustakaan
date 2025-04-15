@@ -7,6 +7,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use App\Models\Book;
+use App\Models\Category;
 
 class BookController extends Controller implements HasMiddleware
 {
@@ -28,16 +29,16 @@ class BookController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
 {
-    $books = Book::query()
-        ->when($request->search, function ($query) use ($request) {
-            $query->where('title', 'like', '%' . $request->search . '%')
-                ->orWhere('author', 'like', '%' . $request->search . '%')
-                ->orWhere('publisher', 'like', '%' . $request->search . '%')
-                ->orWhere('year', 'like', '%' . $request->search . '%');
-        })
-        ->latest()
-        ->paginate(10)
-        ->withQueryString();
+    $books = Book::with('categories')
+    ->when($request->search, function ($query) use ($request) {
+        $query->where('title', 'like', '%' . $request->search . '%')
+              ->orWhere('author', 'like', '%' . $request->search . '%')
+              ->orWhere('publisher', 'like', '%' . $request->search . '%')
+              ->orWhere('year', 'like', '%' . $request->search . '%');
+    })
+    ->latest()
+    ->paginate(10)
+    ->withQueryString();
 
     return Inertia::render('Books/Index', [
         'books'   => $books, 
@@ -50,9 +51,14 @@ class BookController extends Controller implements HasMiddleware
      * Show the form for creating a new book.
      */
     public function create()
-    {
-        return Inertia::render('Books/Create');
-    }
+{
+    $categories = Category::all();
+
+    return Inertia::render('Books/Create', [
+        'categories' => $categories,
+    ]);
+}
+
 
     /**
      * Store a newly created book in storage.
@@ -64,49 +70,63 @@ class BookController extends Controller implements HasMiddleware
             'author' => 'required|min:3|max:255',
             'publisher' => 'required|min:3|max:255',
             'year' => 'required|integer|min:1900|max:2025',
+            'category_ids' => 'required|array',
+            'category_ids.*' => 'exists:categories,id',
         ]);
-
-        Book::create([
+    
+        $book = Book::create([
             'title' => $request->title,
             'author' => $request->author,
             'publisher' => $request->publisher,
             'year' => $request->year,
         ]);
-
+    
+        $book->categories()->attach($request->category_ids);
+    
         return to_route('books.index')->with('success', 'Book created successfully.');
     }
+    
 
     /**
      * Show the form for editing the specified book.
      */
     public function edit(Book $book)
     {
+        $book->load('categories');
+        $categories = Category::all();
+    
         return Inertia::render('Books/Edit', [
             'book' => $book,
+            'categories' => $categories,
         ]);
     }
-
+    
     /**
      * Update the specified book in storage.
      */
     public function update(Request $request, Book $book)
-    {
-        $request->validate([
-            'title' => 'required|min:3|max:255',
-            'author' => 'required|min:3|max:255',
-            'publisher' => 'required|min:3|max:255',
-            'year' => 'required|integer|min:1900|max:2025',
-        ]);
+{
+    $request->validate([
+        'title' => 'required|min:3|max:255',
+        'author' => 'required|min:3|max:255',
+        'publisher' => 'required|min:3|max:255',
+        'year' => 'required|integer|min:1900|max:2025',
+        'category_ids' => 'required|array',
+        'category_ids.*' => 'exists:categories,id',
+    ]);
 
-        $book->update([
-            'title' => $request->title,
-            'author' => $request->author,
-            'publisher' => $request->publisher,
-            'year' => $request->year,
-        ]);
+    $book->update([
+        'title' => $request->title,
+        'author' => $request->author,
+        'publisher' => $request->publisher,
+        'year' => $request->year,
+    ]);
 
-        return to_route('books.index')->with('success', 'Book updated successfully.');
-    }
+    $book->categories()->sync($request->category_ids);
+
+    return to_route('books.index')->with('success', 'Book updated successfully.');
+}
+
     
 
     /**
