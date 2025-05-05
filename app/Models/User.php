@@ -51,4 +51,18 @@ class User extends Authenticatable
     {
         return $this->getAllPermissions()->mapWithKeys(fn($permission) => [$permission['name'] => true]);
     }
+
+    public function collections()
+{
+    return $this->hasMany(Collection::class);
 }
+
+// app/Models/User.php
+
+public function reviews()
+{
+    return $this->hasMany(Review::class);
+}
+
+}
+

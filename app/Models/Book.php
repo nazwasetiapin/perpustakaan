@@ -17,4 +17,18 @@ class Book extends Model
     {
         return $this->belongsToMany(Category::class, 'book_category');
     }
+
+    public function collections()
+{
+    return $this->hasMany(Collection::class);
+}
+
+// app/Models/Book.php
+
+public function reviews()
+{
+    return $this->hasMany(Review::class);
+}
+
+
 }
