@@ -39,7 +39,7 @@ class CategoryController extends Controller implements HasMiddleware
     }
 
     public function create()
-    {
+    { 
         return Inertia::render('Categories/Create');
     }
 
