@@ -6,6 +6,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\BorrowingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,7 +42,17 @@ Route::middleware('auth')->group(function () {
 
     // categories route
     Route::resource('/categories', CategoryController::class);
-    
+
+    // collections route
+    Route::resource('/collections', CollectionController::class);
+
+    // rivews route
+    Route::resource('/reviews', ReviewController::class);
+
+    // borrowings route
+    Route::resource('/borrowings', BorrowingController::class);
+
+     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
